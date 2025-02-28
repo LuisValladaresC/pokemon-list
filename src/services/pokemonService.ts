@@ -2,8 +2,6 @@ import { PokemonDetails } from "../types/pokemon";
 
 export const getPokemons = async (limit: number, offset: number) => {
   const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
-  console.log(url);
-
   const response = await fetch(url);
   if (!response.ok) throw new Error('Failed to fetch pokemon data');
   const data = await response.json();
@@ -12,8 +10,6 @@ export const getPokemons = async (limit: number, offset: number) => {
 
 export const getPokemonDetails = async (id: string) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
-  console.log(url);
-
   const response = await fetch(url);
   if (!response.ok) throw new Error('Failed to fetch pokemon data');
   const data = await response.json();
@@ -40,7 +36,7 @@ export const getPokemonDetails = async (id: string) => {
         break;
     }
     return accum;
-  });
+  }, {});
 
   pokemonDetails.abilities = data.abilities.map((ability: any) => ability.ability.name);
 
