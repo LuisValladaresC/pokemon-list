@@ -11,14 +11,15 @@ interface PokemonCardProps {
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const dispatch = useDispatch();
   const [showDetails, setShowDetails] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   const handleClick = (id: string) => {
-    if (pokemon.details) {
-      setShowDetails(!showDetails);
-    } else {
+    setShowDetails(!showDetails);
+    if (!pokemon.details) {
+      setLoadingDetails(true);
       getPokemonDetails(id).then((details) => {
         dispatch(addPokemonDetails({ id, details }));
-        setShowDetails(!showDetails);
+        setLoadingDetails(false);
       });
     }
   }
@@ -30,15 +31,20 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       </header>
       <div className="relative grid justify-center items-center p-2">
         <img src={pokemon.image} alt={pokemon.name} className="h-50 max-w-60" />
-        {(showDetails && pokemon.details) &&
+        {showDetails &&
           <div className="absolute top-0 bottom-0 right-0 flex flex-col justify-center left-0 bg-white dark:bg-black/80 dark:text-white opacity-95 px-4">
-            <p><span className="font-bold">HP:</span> {pokemon.details.hp}</p>
-            <p><span className="font-bold">Attack:</span> {pokemon.details.attack}</p>
-            <p><span className="font-bold">Defense:</span> {pokemon.details.defense}</p>
-            <p><span className="font-bold">Special Attack:</span> {pokemon.details.specialAttack}</p>
-            <p><span className="font-bold">Special Defense:</span> {pokemon.details.specialDefense}</p>
-            <p><span className="font-bold">Speed:</span> {pokemon.details.speed}</p>
-            <p><span className="font-bold">Abilities:</span> {pokemon.details.abilities.join(", ")}</p>
+            {loadingDetails && <p className="text-center animate-pulse">Loading details...</p>}
+            {(!loadingDetails && pokemon.details) &&
+              <>
+                <p><span className="font-bold">HP:</span> {pokemon.details.hp}</p>
+                <p><span className="font-bold">Attack:</span> {pokemon.details.attack}</p>
+                <p><span className="font-bold">Defense:</span> {pokemon.details.defense}</p>
+                <p><span className="font-bold">Special Attack:</span> {pokemon.details.specialAttack}</p>
+                <p><span className="font-bold">Special Defense:</span> {pokemon.details.specialDefense}</p>
+                <p><span className="font-bold">Speed:</span> {pokemon.details.speed}</p>
+                <p><span className="font-bold">Abilities:</span> {pokemon.details.abilities.join(", ")}</p>
+              </>
+            }
           </div>
         }
       </div>
