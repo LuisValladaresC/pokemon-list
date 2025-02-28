@@ -15,7 +15,7 @@ function App() {
           placeholder='Search a pokemon'
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className='rounded-lg border border-gray-300 w-80 p-4 mb-6 dark:placeholder:text-white/70' />
+          className='rounded-lg border border-gray-300 w-80 p-4 mb-6 dark:text-white dark:placeholder:text-white/70' />
 
       <Suspense fallback={<div className="dark:text-white">Loading Pokemons...</div>}>
         <PokemonList page={page} search={search} />
